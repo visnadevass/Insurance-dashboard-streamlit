@@ -19,7 +19,30 @@ def load_data():
     return df
 
 df = load_data()
+# ----------------------------------------------------
+# Sidebar Filters
+# ----------------------------------------------------
+st.sidebar.header("📂 Dashboard Filters")
 
+# Marketing Channel Filter
+selected_channels = st.sidebar.multiselect(
+    "Select Marketing Channel",
+    options=sorted(df["Marketing Channel"].unique()),
+    default=sorted(df["Marketing Channel"].unique())
+)
+
+# Device Category Filter
+selected_devices = st.sidebar.multiselect(
+    "Select Device Category",
+    options=sorted(df["Device Category"].unique()),
+    default=sorted(df["Device Category"].unique())
+)
+
+# Apply Filters
+filtered_df = df[
+    (df["Marketing Channel"].isin(selected_channels)) &
+    (df["Device Category"].isin(selected_devices))
+]
 # ----------------------------------------------------
 # Dashboard Title
 # ----------------------------------------------------
@@ -48,14 +71,14 @@ st.subheader("📁 Dataset Information")
 col1, col2 = st.columns(2)
 
 with col1:
-    st.metric("Rows", df.shape[0])
+    st.metric("Rows", filtered_df.shape[0])
 
 with col2:
-    st.metric("Columns", df.shape[1])
+    st.metric("Columns", filtered_df.shape[1])
 
 st.write("### Column Names")
 
 st.write(list(df.columns))
 
 with st.expander("View Dataset Preview"):
-    st.dataframe(df.head())
+    st.dataframe(filtered_df.head())
