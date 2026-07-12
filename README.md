@@ -1,4 +1,3 @@
-# visnadevass-insurance-dashboard-streamlit
 # Insurance Website Analytics Dashboard
 
 This project analyses an insurance company's website data using Python and Streamlit.
