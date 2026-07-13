@@ -19,30 +19,29 @@ def load_data():
     return df
 
 df = load_data()
+
 # ----------------------------------------------------
 # Sidebar Filters
 # ----------------------------------------------------
 st.sidebar.header("📂 Dashboard Filters")
 
-# Marketing Channel Filter
 selected_channels = st.sidebar.multiselect(
     "Select Marketing Channel",
     options=sorted(df["Marketing Channel"].unique()),
     default=sorted(df["Marketing Channel"].unique())
 )
 
-# Device Category Filter
 selected_devices = st.sidebar.multiselect(
     "Select Device Category",
     options=sorted(df["Device Category"].unique()),
     default=sorted(df["Device Category"].unique())
 )
 
-# Apply Filters
 filtered_df = df[
     (df["Marketing Channel"].isin(selected_channels)) &
     (df["Device Category"].isin(selected_devices))
 ]
+
 # ----------------------------------------------------
 # Dashboard Title
 # ----------------------------------------------------
@@ -64,6 +63,44 @@ Use the filters on the left to explore:
 st.divider()
 
 # ----------------------------------------------------
+# KPI Cards
+# ----------------------------------------------------
+st.subheader("📈 Key Performance Indicators")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.metric("👥 Total Users", f"{filtered_df['Users'].sum():,}")
+
+with col2:
+    st.metric("💰 Total Revenue", f"${filtered_df['Revenue'].sum():,.2f}")
+
+with col3:
+    st.metric("📄 Total Quotes", f"{filtered_df['TotalNumberOfInsuranceQuotes'].sum():,}")
+
+col4, col5, col6 = st.columns(3)
+
+with col4:
+    st.metric(
+        "📑 Policies Purchased",
+        f"{filtered_df['TotalNumberOfInsurancePoliciesPurchaed'].sum():,}"
+    )
+
+with col5:
+    st.metric(
+        "📈 Average Revenue",
+        f"${filtered_df['Revenue'].mean():.2f}"
+    )
+
+with col6:
+    st.metric(
+        "⏱ Avg Session Duration",
+        f"{filtered_df['Avg. Session Duration'].mean():.2f} sec"
+    )
+
+st.divider()
+
+# ----------------------------------------------------
 # Dataset Information
 # ----------------------------------------------------
 st.subheader("📁 Dataset Information")
@@ -78,7 +115,7 @@ with col2:
 
 st.write("### Column Names")
 
-st.write(list(df.columns))
+st.write(list(filtered_df.columns))
 
 with st.expander("View Dataset Preview"):
     st.dataframe(filtered_df.head())
