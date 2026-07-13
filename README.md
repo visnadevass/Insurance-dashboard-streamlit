@@ -160,7 +160,7 @@ streamlit run app.py
 
 ## 👨‍💻 Developer
 
-**Visna Devass**
+**Visna De Vass**
 
 Data Science Project Lifecycle
 
