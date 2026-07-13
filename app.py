@@ -27,11 +27,6 @@ def load_data():
 df = load_data()
 
 # ----------------------------------------------------
-# Sidebar Filters
-# ----------------------------------------------------
-st.sidebar.header("📂 Dashboard Filters")
-
-# ----------------------------------------------------
 # Dashboard Information
 # ----------------------------------------------------
 
@@ -56,6 +51,12 @@ Insurance Website Analytics Dataset
 """)
 
 st.sidebar.divider()
+
+# ----------------------------------------------------
+# Sidebar Filters
+# ----------------------------------------------------
+
+st.sidebar.header("📂 Dashboard Filters")
 
 selected_channels = st.sidebar.multiselect(
     "Select Marketing Channel",
@@ -194,6 +195,7 @@ users_channel = (
     filtered_df
     .groupby("Marketing Channel")["Users"]
     .sum()
+    .sort_values(ascending=False)
     .reset_index()
 )
 
@@ -221,6 +223,7 @@ revenue_channel = (
     filtered_df
     .groupby("Marketing Channel")["Revenue"]
     .sum()
+    .sort_values(ascending=False)
     .reset_index()
 )
 
@@ -248,6 +251,7 @@ policies_channel = (
     filtered_df
     .groupby("Marketing Channel")["TotalNumberOfInsurancePoliciesPurchaed"]
     .sum()
+    .sort_values(ascending=False)
     .reset_index()
 )
 
@@ -256,7 +260,7 @@ fig_policy = px.bar(
     x="Marketing Channel",
     y="TotalNumberOfInsurancePoliciesPurchaed",
     color="TotalNumberOfInsurancePoliciesPurchaed",
-    title="Policies Purchased by Marketing Channel",
+    title="Insurance Policies Purchased by Marketing Channel",
     text_auto=True
 )
 
@@ -505,6 +509,9 @@ summary = (
     )
     .reset_index()
 )
+
+summary["Revenue"] = summary["Revenue"].map(lambda x: f"${x:,.2f}")
+
 st.dataframe(summary, width="stretch")
 
 show_insight("""
