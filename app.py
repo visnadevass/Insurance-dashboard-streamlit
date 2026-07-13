@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # ----------------------------------------------------
 # Page Configuration
@@ -338,5 +340,109 @@ The conversion rate compares insurance policies purchased with the number of use
 
 This helps identify which device converts visitors into customers most efficiently rather than simply attracting the highest traffic.
 """)
+
+
+
+# ----------------------------------------------------
+# Customer Behaviour Analysis
+# ----------------------------------------------------
+
+st.divider()
+
+st.header("📈 Customer Behaviour Analysis")
+
+fig_hist = px.histogram(
+    filtered_df,
+    x="Revenue",
+    nbins=30,
+    title="Revenue Distribution"
+)
+
+st.plotly_chart(fig_hist, width="stretch")
+
+st.info("""
+**Business Insight**
+
+Revenue is positively skewed. Most observations generate little or no revenue,
+while a small number contribute exceptionally high revenue.
+
+This indicates that only a relatively small proportion of customer sessions
+generate substantial business value.
+""")
+
+
+fig_scatter = px.scatter(
+    filtered_df,
+    x="Pages / Session",
+    y="Revenue",
+    color="Marketing Channel",
+    title="Pages per Session vs Revenue"
+)
+
+st.plotly_chart(fig_scatter, width="stretch")
+
+st.info("""
+**Business Insight**
+
+There is little relationship between the number of pages viewed and revenue.
+
+Browsing more pages does not necessarily result in purchasing an insurance policy,
+suggesting that website engagement alone is not enough to increase sales.
+""")
+
+
+
+fig_quotes = px.scatter(
+    filtered_df,
+    x="Users",
+    y="TotalNumberOfInsuranceQuotes",
+    color="Device Category",
+    title="Users vs Insurance Quotes"
+)
+
+st.plotly_chart(fig_quotes, width="stretch")
+
+st.info("""
+**Business Insight**
+
+There is a strong positive relationship between website users and insurance quote requests.
+
+As more visitors access the website, the number of insurance quotes generally increases,
+although this does not always translate into policy purchases.
+""")
+
+
+
+st.subheader("🔥 Correlation Matrix")
+
+numeric_df = filtered_df.select_dtypes(include="number")
+
+corr = numeric_df.corr()
+
+fig, ax = plt.subplots(figsize=(10,6))
+
+sns.heatmap(
+    corr,
+    annot=True,
+    cmap="Blues",
+    fmt=".2f",
+    ax=ax
+)
+
+st.pyplot(fig)
+
+st.info("""
+**Business Insight**
+
+The strongest relationship is between Policies Purchased and Revenue,
+confirming that policy sales are the primary driver of business income.
+
+Users and Insurance Quotes also show a strong positive relationship,
+indicating that increased website traffic leads to more quote requests.
+
+Most remaining correlations are weak, suggesting that simply increasing
+website engagement does not automatically increase revenue.
+""")
+
 
 
