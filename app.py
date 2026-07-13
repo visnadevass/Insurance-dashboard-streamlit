@@ -147,7 +147,7 @@ fig_users = px.bar(
     text_auto=True
 )
 
-st.plotly_chart(fig_users, use_container_width=True)
+st.plotly_chart(fig_users, width="stretch")
 st.info(
     """
 **Business Insight**
@@ -175,7 +175,7 @@ fig_revenue = px.bar(
     text_auto=".2f"
 )
 
-st.plotly_chart(fig_revenue, use_container_width=True)
+st.plotly_chart(fig_revenue, width="stretch")
 st.info(
     """
 **Business Insight**
@@ -203,7 +203,7 @@ fig_policy = px.bar(
     text_auto=True
 )
 
-st.plotly_chart(fig_policy, use_container_width=True)
+st.plotly_chart(fig_policy, width="stretch")
 st.info(
     """
 **Business Insight**
@@ -211,3 +211,132 @@ st.info(
 Aggregator channels recorded the highest number of insurance policy purchases, making them the most valuable acquisition channel.
 """
 )
+
+
+
+# ----------------------------------------------------
+# Device Category Analysis
+# ----------------------------------------------------
+st.divider()
+
+st.header("📱 Device Category Performance")
+
+# Users by Device
+device_users = (
+    filtered_df
+    .groupby("Device Category")["Users"]
+    .sum()
+    .reset_index()
+)
+
+fig_device_users = px.bar(
+    device_users,
+    x="Device Category",
+    y="Users",
+    color="Users",
+    title="Users by Device Category",
+    text_auto=True
+)
+
+st.plotly_chart(fig_device_users, width="stretch")
+
+st.info("""
+**Business Insight**
+
+Mobile devices generated the highest number of users, showing that most visitors access the insurance website using smartphones.
+""")
+
+# Revenue by Device
+device_revenue = (
+    filtered_df
+    .groupby("Device Category")["Revenue"]
+    .sum()
+    .reset_index()
+)
+
+fig_device_revenue = px.bar(
+    device_revenue,
+    x="Device Category",
+    y="Revenue",
+    color="Revenue",
+    title="Revenue by Device Category",
+    text_auto=".2f"
+)
+
+st.plotly_chart(fig_device_revenue, width="stretch")
+
+st.info("""
+**Business Insight**
+
+Mobile devices generated the highest total revenue, indicating that mobile users contribute significantly to business performance.
+""")
+
+# Policies Purchased by Device
+device_policy = (
+    filtered_df
+    .groupby("Device Category")["TotalNumberOfInsurancePoliciesPurchaed"]
+    .sum()
+    .reset_index()
+)
+
+fig_device_policy = px.bar(
+    device_policy,
+    x="Device Category",
+    y="TotalNumberOfInsurancePoliciesPurchaed",
+    color="TotalNumberOfInsurancePoliciesPurchaed",
+    title="Policies Purchased by Device Category",
+    text_auto=True
+)
+
+st.plotly_chart(fig_device_policy, width="stretch")
+
+st.info("""
+**Business Insight**
+
+Mobile users purchased the largest number of insurance policies, making mobile the strongest device category for overall sales.
+""")
+
+
+
+# ----------------------------------------------------
+# Conversion Rate by Device
+# ----------------------------------------------------
+
+st.subheader("📈 Policy Conversion Rate by Device")
+
+conversion = (
+    filtered_df
+    .groupby("Device Category")
+    .agg({
+        "Users":"sum",
+        "TotalNumberOfInsurancePoliciesPurchaed":"sum"
+    })
+)
+
+conversion["Conversion Rate (%)"] = (
+    conversion["TotalNumberOfInsurancePoliciesPurchaed"]
+    / conversion["Users"]
+) * 100
+
+conversion = conversion.reset_index()
+
+fig_conversion = px.bar(
+    conversion,
+    x="Device Category",
+    y="Conversion Rate (%)",
+    color="Conversion Rate (%)",
+    text_auto=".2f",
+    title="Policy Conversion Rate by Device"
+)
+
+st.plotly_chart(fig_conversion, width="stretch")
+
+st.info("""
+**Business Insight**
+
+The conversion rate compares insurance policies purchased with the number of users for each device category.
+
+This helps identify which device converts visitors into customers most efficiently rather than simply attracting the highest traffic.
+""")
+
+
