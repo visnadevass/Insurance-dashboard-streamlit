@@ -88,16 +88,15 @@ st.sidebar.download_button(
 st.title("📊 Insurance Website Analytics Dashboard")
 
 st.markdown("""
-Welcome to the interactive dashboard for analysing customer behaviour on an insurance company's website.
+This interactive dashboard analyses customer behaviour on an insurance company's website.
 
-Use the filters on the left to explore:
+The dashboard enables users to:
 
-- Marketing channel performance
-- Device category performance
-- Revenue
-- Insurance quotes
-- Policy purchases
-- Customer engagement
+- Analyse marketing channel performance
+- Compare device categories
+- Monitor key business KPIs
+- Explore customer behaviour
+- Evaluate policy conversion and revenue
 """)
 
 
@@ -127,7 +126,7 @@ with col4:
 
 with col5:
     st.metric(
-        "📈 Average Revenue",
+        "📈 Average Revenue per Record",
         f"${filtered_df['Revenue'].mean():.2f}"
     )
 
@@ -136,6 +135,23 @@ with col6:
         "⏱ Avg Session Duration",
         f"{filtered_df['Avg. Session Duration'].mean():.2f} sec"
     )
+
+
+
+st.success("""
+### Key Insights
+
+• Organic Search attracts the highest number of website visitors.
+
+• Aggregators generate the highest revenue and policy purchases.
+
+• Mobile devices contribute the most users and revenue.
+
+• Revenue is highly right-skewed.
+
+• Policy purchases are the strongest driver of revenue.
+""")
+
 
 
 # ----------------------------------------------------
@@ -151,9 +167,16 @@ with col1:
 with col2:
     st.metric("Columns", filtered_df.shape[1])
 
-st.write("### Column Names")
+st.write("### Dataset Columns")
 
-st.write(list(filtered_df.columns))
+columns_df = pd.DataFrame({
+    "Column Name": filtered_df.columns
+})
+
+st.dataframe(columns_df, width="stretch", hide_index=True)
+
+with st.expander("View Summary Statistics"):
+    st.dataframe(filtered_df.describe())
 
 with st.expander("View Dataset Preview"):
     st.dataframe(filtered_df.head())
@@ -377,7 +400,7 @@ section_title("📈 Customer Behaviour Analysis")
 fig_hist = px.histogram(
     filtered_df,
     x="Revenue",
-    nbins=30,
+    nbins=25,
     title="Revenue Distribution"
 )
 
@@ -494,6 +517,11 @@ This suggests that aggregator websites deliver higher-quality leads and better c
 st.divider()
 
 st.caption(
-    "Insurance Website Analytics Dashboard | "
-    "Developed using Python, Streamlit and Plotly"
+    """
+Insurance Website Analytics Dashboard
+
+Developed using Python • Streamlit • Plotly • Pandas
+
+© 2026
+"""
 )
