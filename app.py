@@ -28,6 +28,32 @@ df = load_data()
 # ----------------------------------------------------
 st.sidebar.header("📂 Dashboard Filters")
 
+# ----------------------------------------------------
+# Dashboard Information
+# ----------------------------------------------------
+
+st.sidebar.title("📊 Dashboard Information")
+
+st.sidebar.markdown("""
+**Project**
+
+Insurance Website Analytics Dashboard
+
+**Module**
+
+Data Science Project Lifecycle
+
+**Developer**
+
+Visna De Vass
+
+**Dataset**
+
+Insurance Website Analytics Dataset
+""")
+
+st.sidebar.divider()
+
 selected_channels = st.sidebar.multiselect(
     "Select Marketing Channel",
     options=sorted(df["Marketing Channel"].unique()),
@@ -44,6 +70,14 @@ filtered_df = df[
     (df["Marketing Channel"].isin(selected_channels)) &
     (df["Device Category"].isin(selected_devices))
 ]
+
+# Download filtered dataset
+st.sidebar.download_button(
+    label="📥 Download Filtered Data",
+    data=filtered_df.to_csv(index=False),
+    file_name="filtered_insurance_data.csv",
+    mime="text/csv"
+)
 
 # ----------------------------------------------------
 # Dashboard Title
@@ -446,3 +480,37 @@ website engagement does not automatically increase revenue.
 
 
 
+st.divider()
+
+st.header("📋 Marketing Channel Summary")
+summary = (
+    filtered_df
+    .groupby("Marketing Channel")
+    .agg({
+        "Users":"sum",
+        "Revenue":"sum",
+        "TotalNumberOfInsurancePoliciesPurchaed":"sum",
+        "TotalNumberOfInsuranceQuotes":"sum"
+    })
+    .sort_values(
+        by="Revenue",
+        ascending=False
+    )
+    .reset_index()
+)
+st.dataframe(summary, width="stretch")
+
+st.info("""
+**Business Insight**
+
+Aggregators generated the highest revenue despite attracting fewer users than Organic Search.
+
+This suggests that aggregator websites deliver higher-quality leads and better customer conversion.
+""")
+
+st.divider()
+
+st.caption(
+    "Insurance Website Analytics Dashboard | "
+    "Developed using Python, Streamlit and Plotly"
+)
