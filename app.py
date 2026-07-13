@@ -4,6 +4,9 @@ import plotly.express as px
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from utils import section_title, show_insight
+
+
 # ----------------------------------------------------
 # Page Configuration
 # ----------------------------------------------------
@@ -97,12 +100,11 @@ Use the filters on the left to explore:
 - Customer engagement
 """)
 
-st.divider()
 
 # ----------------------------------------------------
 # KPI Cards
 # ----------------------------------------------------
-st.subheader("📈 Key Performance Indicators")
+section_title("📈 Key Performance Indicators")
 
 col1, col2, col3 = st.columns(3)
 
@@ -135,12 +137,11 @@ with col6:
         f"{filtered_df['Avg. Session Duration'].mean():.2f} sec"
     )
 
-st.divider()
 
 # ----------------------------------------------------
 # Dataset Information
 # ----------------------------------------------------
-st.subheader("📁 Dataset Information")
+section_title("📁 Dataset Information")
 
 col1, col2 = st.columns(2)
 
@@ -162,9 +163,8 @@ with st.expander("View Dataset Preview"):
 # ----------------------------------------------------
 # Marketing Channel Analysis
 # ----------------------------------------------------
-st.divider()
 
-st.header("📊 Marketing Channel Performance")
+section_title("📊 Marketing Channel Performance")
 
 # Users by Marketing Channel
 users_channel = (
@@ -184,9 +184,8 @@ fig_users = px.bar(
 )
 
 st.plotly_chart(fig_users, width="stretch")
-st.info(
+show_insight(
     """
-**Business Insight**
 
 Organic Search attracted the largest number of users, indicating strong visibility in search engines.
 
@@ -212,9 +211,8 @@ fig_revenue = px.bar(
 )
 
 st.plotly_chart(fig_revenue, width="stretch")
-st.info(
+show_insight(
     """
-**Business Insight**
 
 Aggregators generated the highest revenue despite not attracting the largest number of users.
 
@@ -240,9 +238,8 @@ fig_policy = px.bar(
 )
 
 st.plotly_chart(fig_policy, width="stretch")
-st.info(
+show_insight(
     """
-**Business Insight**
 
 Aggregator channels recorded the highest number of insurance policy purchases, making them the most valuable acquisition channel.
 """
@@ -253,9 +250,7 @@ Aggregator channels recorded the highest number of insurance policy purchases, m
 # ----------------------------------------------------
 # Device Category Analysis
 # ----------------------------------------------------
-st.divider()
-
-st.header("📱 Device Category Performance")
+section_title("📱 Device Category Performance")
 
 # Users by Device
 device_users = (
@@ -276,8 +271,7 @@ fig_device_users = px.bar(
 
 st.plotly_chart(fig_device_users, width="stretch")
 
-st.info("""
-**Business Insight**
+show_insight("""
 
 Mobile devices generated the highest number of users, showing that most visitors access the insurance website using smartphones.
 """)
@@ -301,8 +295,7 @@ fig_device_revenue = px.bar(
 
 st.plotly_chart(fig_device_revenue, width="stretch")
 
-st.info("""
-**Business Insight**
+show_insight("""
 
 Mobile devices generated the highest total revenue, indicating that mobile users contribute significantly to business performance.
 """)
@@ -326,8 +319,7 @@ fig_device_policy = px.bar(
 
 st.plotly_chart(fig_device_policy, width="stretch")
 
-st.info("""
-**Business Insight**
+show_insight("""
 
 Mobile users purchased the largest number of insurance policies, making mobile the strongest device category for overall sales.
 """)
@@ -367,8 +359,7 @@ fig_conversion = px.bar(
 
 st.plotly_chart(fig_conversion, width="stretch")
 
-st.info("""
-**Business Insight**
+show_insight("""
 
 The conversion rate compares insurance policies purchased with the number of users for each device category.
 
@@ -381,9 +372,7 @@ This helps identify which device converts visitors into customers most efficient
 # Customer Behaviour Analysis
 # ----------------------------------------------------
 
-st.divider()
-
-st.header("📈 Customer Behaviour Analysis")
+section_title("📈 Customer Behaviour Analysis")
 
 fig_hist = px.histogram(
     filtered_df,
@@ -394,8 +383,7 @@ fig_hist = px.histogram(
 
 st.plotly_chart(fig_hist, width="stretch")
 
-st.info("""
-**Business Insight**
+show_insight("""
 
 Revenue is positively skewed. Most observations generate little or no revenue,
 while a small number contribute exceptionally high revenue.
@@ -415,8 +403,7 @@ fig_scatter = px.scatter(
 
 st.plotly_chart(fig_scatter, width="stretch")
 
-st.info("""
-**Business Insight**
+show_insight("""
 
 There is little relationship between the number of pages viewed and revenue.
 
@@ -436,8 +423,7 @@ fig_quotes = px.scatter(
 
 st.plotly_chart(fig_quotes, width="stretch")
 
-st.info("""
-**Business Insight**
+show_insight("""
 
 There is a strong positive relationship between website users and insurance quote requests.
 
@@ -465,8 +451,7 @@ sns.heatmap(
 
 st.pyplot(fig)
 
-st.info("""
-**Business Insight**
+show_insight("""
 
 The strongest relationship is between Policies Purchased and Revenue,
 confirming that policy sales are the primary driver of business income.
@@ -480,9 +465,8 @@ website engagement does not automatically increase revenue.
 
 
 
-st.divider()
 
-st.header("📋 Marketing Channel Summary")
+section_title("📋 Marketing Channel Summary")
 summary = (
     filtered_df
     .groupby("Marketing Channel")
@@ -500,8 +484,7 @@ summary = (
 )
 st.dataframe(summary, width="stretch")
 
-st.info("""
-**Business Insight**
+show_insight("""
 
 Aggregators generated the highest revenue despite attracting fewer users than Organic Search.
 
